@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import MessageIMG from "@/assets/message.png";
+import { useClickSound } from "@/hooks/useClickSound";
+
 import EmailIMG from "@/assets/email.png";
 import LinkedInIMG from "@/assets/linkedin.svg";
 import GithubIMG from "@/assets/github (1).svg";
 
 function Contact() {
+  const playClickSound = useClickSound();
   const [result, setResult] = useState("");
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
@@ -24,8 +26,7 @@ function Contact() {
     const formData = new FormData(form);
 
     const accessKey =
-      process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
-      "Your-API-token";
+      process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "Your-API-token";
 
     formData.append("access_key", accessKey);
 
@@ -60,40 +61,71 @@ function Contact() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-4 py-2 font-pixel sm:px-6 sm:py-4 md:px-8">
-      {/* Header */}
-      {/* <div className="mb-2 flex items-center gap-3 border-b-2 border-pink-200 pb-1 sm:mb-3">
-        <Image
-          className="h-9 w-9 shrink-0 object-contain sm:h-10 sm:w-10"
-          src={MessageIMG}
-          alt="message"
-        />
-
-        <h2 className="text-2xl font-bold tracking-wide text-pink-950 sm:text-3xl">
-          Contact
-        </h2>
-      </div> */}
-
+    <div className="mx-auto flex w-full max-w-2xl flex-col px-4 py-2 font-pixel sm:px-6 sm:py-3 md:px-8">
       {/* Social Links */}
-      <div className="mb-4 flex flex-wrap gap-2 sm:mb-5 sm:gap-2.5">
+      <div className="mb-3 flex flex-wrap gap-2 sm:mb-4 sm:gap-2.5">
+        {/* Email */}
         <a
-          href="mailto:shr5ya@gmail.com"
-          className="flex min-w-0 items-center gap-1.5 rounded-xl border-2 border-pink-900 bg-pink-100 px-2.5 py-1.5 text-[11px] font-semibold text-pink-950 shadow-[3px_3px_0px_#831843] transition-all hover:-translate-y-0.5 hover:bg-pink-200 sm:gap-2 sm:px-3 sm:text-xs"
+          href="mailto:s8reya@gmail.com"
+          onClick={playClickSound}
+          className="
+            flex
+            items-center
+            gap-1.5
+            rounded-xl
+            border-2
+            border-pink-900
+            bg-pink-100
+            px-2.5
+            py-1.5
+            text-[11px]
+            font-semibold
+            text-pink-950
+            shadow-[3px_3px_0px_#831843]
+            transition-all
+            hover:-translate-y-0.5
+            hover:bg-pink-200
+            sm:gap-2
+            sm:px-3
+            sm:text-xs
+          "
         >
           <Image
             className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
             src={EmailIMG}
-            alt="email"
+            alt="Email"
           />
 
-          <span className="truncate">shr5ya@gmail.com</span>
+          <span>s8reya@gmail.com</span>
         </a>
 
+        {/* LinkedIn */}
         <a
+          href="https://www.linkedin.com/in/s8reya"
+          onClick={playClickSound}
           target="_blank"
           rel="noopener noreferrer"
-          href="https://www.linkedin.com/in/s8reya"
-          className="flex items-center gap-1.5 rounded-xl border-2 border-pink-900 bg-pink-100 px-2.5 py-1.5 text-[11px] font-semibold text-pink-950 shadow-[3px_3px_0px_#831843] transition-all hover:-translate-y-0.5 hover:bg-pink-200 sm:gap-2 sm:px-3 sm:text-xs"
+          className="
+            flex
+            items-center
+            gap-1.5
+            rounded-xl
+            border-2
+            border-pink-900
+            bg-pink-100
+            px-2.5
+            py-1.5
+            text-[11px]
+            font-semibold
+            text-pink-950
+            shadow-[3px_3px_0px_#831843]
+            transition-all
+            hover:-translate-y-0.5
+            hover:bg-pink-200
+            sm:gap-2
+            sm:px-3
+            sm:text-xs
+          "
         >
           <Image
             className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
@@ -104,11 +136,33 @@ function Contact() {
           <span>LinkedIn</span>
         </a>
 
+        {/* GitHub */}
         <a
+          href="https://github.com/shr5ya"
+          onClick={playClickSound}
           target="_blank"
           rel="noopener noreferrer"
-          href="https://github.com/shr5ya"
-          className="flex items-center gap-1.5 rounded-xl border-2 border-pink-900 bg-pink-100 px-2.5 py-1.5 text-[11px] font-semibold text-pink-950 shadow-[3px_3px_0px_#831843] transition-all hover:-translate-y-0.5 hover:bg-pink-200 sm:gap-2 sm:px-3 sm:text-xs"
+          className="
+            flex
+            items-center
+            gap-1.5
+            rounded-xl
+            border-2
+            border-pink-900
+            bg-pink-100
+            px-2.5
+            py-1.5
+            text-[11px]
+            font-semibold
+            text-pink-950
+            shadow-[3px_3px_0px_#831843]
+            transition-all
+            hover:-translate-y-0.5
+            hover:bg-pink-200
+            sm:gap-2
+            sm:px-3
+            sm:text-xs
+          "
         >
           <Image
             className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
@@ -120,14 +174,28 @@ function Contact() {
         </a>
       </div>
 
-      {/* Form */}
+      {/* Contact Form */}
       <form
         onSubmit={handleSubmit}
-        className="flex w-full flex-col gap-3 rounded-2xl border-[3px] border-black bg-pink-50/70 p-4 shadow-[4px_4px_0px_#111] sm:gap-3.5 sm:p-5 sm:shadow-[6px_6px_0px_#111] md:p-6"
+        className="
+          flex
+          w-full
+          flex-col
+          gap-3
+          rounded-2xl
+          border-[3px]
+          border-black
+          bg-pink-50/70
+          p-4
+          shadow-[5px_5px_0px_#111]
+          sm:gap-3.5
+          sm:p-5
+          md:p-5
+        "
       >
         {/* Name */}
         <div>
-          <label className="mb-1 block text-xs font-bold text-pink-950 sm:mb-1 sm:text-sm">
+          <label className="mb-1 block text-xs font-bold text-pink-950 sm:text-sm">
             Your Name <span className="text-pink-600">*</span>
           </label>
 
@@ -136,13 +204,29 @@ function Contact() {
             name="name"
             type="text"
             placeholder="Name"
-            className="w-full rounded-lg border-2 border-black bg-white px-3 py-2 font-sans text-xs text-pink-950 shadow-[2px_2px_0px_#111] outline-none placeholder:text-pink-300 focus:ring-2 focus:ring-pink-400 sm:rounded-xl sm:border-[2.5px] sm:px-4 sm:py-2.5 sm:text-sm"
+            className="
+              w-full
+              rounded-xl
+              border-[2.5px]
+              border-black
+              bg-white
+              px-4
+              py-2.5
+              font-sans
+              text-sm
+              text-pink-950
+              shadow-[2px_2px_0px_#111]
+              outline-none
+              placeholder:text-pink-300
+              focus:ring-2
+              focus:ring-pink-400 transition-shadow duration-150 focus:shadow-[3px_3px_0px_#ec4899]
+            "
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className="mb-1 block text-xs font-bold text-pink-950 sm:mb-1.5 sm:text-sm">
+          <label className="mb-1 block text-xs font-bold text-pink-950 sm:text-sm">
             Email Address <span className="text-pink-600">*</span>
           </label>
 
@@ -151,13 +235,29 @@ function Contact() {
             name="email"
             type="email"
             placeholder="Email"
-            className="w-full rounded-lg border-2 border-black bg-white px-3 py-2 font-sans text-xs text-pink-950 shadow-[2px_2px_0px_#111] outline-none placeholder:text-pink-300 focus:ring-2 focus:ring-pink-400 sm:rounded-xl sm:border-[2.5px] sm:px-4 sm:py-2.5 sm:text-sm"
+            className="
+              w-full
+              rounded-xl
+              border-[2.5px]
+              border-black
+              bg-white
+              px-4
+              py-2.5
+              font-sans
+              text-sm
+              text-pink-950
+              shadow-[2px_2px_0px_#111]
+              outline-none
+              placeholder:text-pink-300
+              focus:ring-2
+              focus:ring-pink-400 transition-shadow duration-150 focus:shadow-[3px_3px_0px_#ec4899]
+            "
           />
         </div>
 
         {/* Message */}
         <div>
-          <label className="mb-1 block text-xs font-bold text-pink-950 sm:mb-1.5 sm:text-sm">
+          <label className="mb-1 block text-xs font-bold text-pink-950 sm:text-sm">
             Message <span className="text-pink-600">*</span>
           </label>
 
@@ -166,20 +266,45 @@ function Contact() {
             name="message"
             rows={4}
             placeholder="Write your note here..."
-            className="w-full resize-none rounded-lg border-2 border-black bg-white px-3 py-2 font-sans text-xs text-pink-950 shadow-[2px_2px_0px_#111] outline-none placeholder:text-pink-300 focus:ring-2 focus:ring-pink-400 sm:rounded-xl sm:border-[2.5px] sm:px-4 sm:py-2.5 sm:text-sm"
+            className="
+              w-full
+              resize-none
+              rounded-xl
+              border-[2.5px]
+              border-black
+              bg-white
+              px-4
+              py-2.5
+              font-sans
+              text-sm
+              text-pink-950
+              shadow-[2px_2px_0px_#111]
+              outline-none
+              placeholder:text-pink-300
+              focus:ring-2
+              focus:ring-pink-400 transition-shadow duration-150 focus:shadow-[3px_3px_0px_#ec4899]
+            "
           />
         </div>
 
         {/* Status */}
         {status !== "idle" && (
           <div
-            className={`rounded-lg border-2 px-3 py-2 text-[11px] font-semibold sm:rounded-xl sm:py-2.5 sm:text-xs ${
-              status === "success"
-                ? "border-green-800 bg-green-100 text-green-900"
-                : status === "error"
-                ? "border-red-800 bg-red-100 text-red-900"
-                : "animate-pulse border-pink-800 bg-pink-100 text-pink-900"
-            }`}
+            className={`
+              rounded-xl
+              border-2
+              px-3
+              py-2
+              text-xs
+              font-semibold
+              ${
+                status === "success"
+                  ? "animate-[pixel-pop_180ms_ease-out] border-green-800 bg-green-100 text-green-900"
+                  : status === "error"
+                    ? "animate-[pixel-pop_180ms_ease-out] border-red-800 bg-red-100 text-red-900"
+                    : "animate-pulse border-pink-800 bg-pink-100 text-pink-900"
+              }
+            `}
           >
             {result}
           </div>
@@ -189,7 +314,31 @@ function Contact() {
         <button
           type="submit"
           disabled={status === "loading"}
-          className="mt-0.5 w-full self-start rounded-lg border-[3px] border-black bg-[#f472b6] px-5 py-2.5 text-xs font-bold text-pink-950 shadow-[3px_3px_0px_#111] transition-all hover:-translate-y-0.5 hover:bg-[#e95dcc] hover:shadow-[4px_4px_0px_#111] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_#111] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:rounded-xl sm:px-6 sm:py-2.5 sm:text-sm sm:shadow-[4px_4px_0px_#111]"
+          className="
+            mt-0.5
+            w-full
+            self-start
+            rounded-xl
+            border-[3px]
+            border-black
+            bg-[#f472b6]
+            px-6
+            py-2.5
+            text-sm
+            font-bold
+            text-pink-950
+            shadow-[4px_4px_0px_#111]
+            transition-all
+            hover:-translate-y-0.5
+            hover:bg-[#e95dcc]
+            hover:shadow-[5px_5px_0px_#111]
+            active:translate-x-[2px]
+            active:translate-y-[2px]
+            active:shadow-[1px_1px_0px_#111]
+            disabled:cursor-not-allowed
+            disabled:opacity-60
+            sm:w-auto
+          "
         >
           {status === "loading" ? "Sending..." : "Send Message →"}
         </button>

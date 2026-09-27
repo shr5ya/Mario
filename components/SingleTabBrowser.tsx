@@ -125,7 +125,7 @@ function SingleTabBrowser({
   const currentTheme = themes[theme];
 
   return (
-    <div className="flex h-dvh w-full items-center justify-center overflow-hidden p-2 py-10 sm:p-4 lg:py-0">
+    <div className="flex h-dvh w-full items-center justify-center overflow-hidden p-2 sm:p-3 lg:p-4">
       <div
         className="
           relative
@@ -134,8 +134,10 @@ function SingleTabBrowser({
           rounded-2xl border-[3px] border-black
           bg-white
           shadow-[4px_4px_0px_#111]
-          sm:h-170
-          sm:max-h-[85vh]
+          sm:h-[calc(100dvh-1.5rem)]
+          sm:max-h-[calc(100dvh-1.5rem)]
+          lg:h-[min(88dvh,52rem)]
+          lg:max-h-[min(88dvh,52rem)]
           sm:max-w-5xl
           sm:rounded-[22px]
           sm:shadow-[8px_8px_0px_#111]

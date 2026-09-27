@@ -12,7 +12,7 @@ function Skills() {
   return (
     <div>
       <TechStack />
-      <div className='flex px-20 pt-4 gap-6'>
+      <div className='flex flex-wrap gap-4 px-4 pt-4 sm:px-6 lg:px-12'>
 
         <a
           href="/resume.pdf"

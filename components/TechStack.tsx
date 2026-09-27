@@ -69,7 +69,7 @@ const skills = [
       { name: "HTML", icon: HTMLSVG },
       { name: "CSS", icon: CSSSVG },
       { name: "Tailwind CSS", icon: TailwindSVG },
-      { name: "MERN Stack" },
+    
     ],
   },
 
@@ -93,7 +93,7 @@ function SkillItem({
   icon?: any;
 }) {
   return (
-    <div className="flex flex-row text-xs font-pixel border border-pink-200/40 rounded bg-pink-100/80 w-fit px-2 py-1 items-center gap-2">
+    <div className="flex flex-row text-xs font-pixel border border-pink-200/40 rounded bg-pink-100/80 w-fit px-2 py-1 items-center gap-2 transition-all duration-150 hover:-translate-y-0.5 hover:border-pink-300 hover:bg-pink-200 hover:shadow-[2px_2px_0px_#f472b6] active:scale-95 motion-reduce:transform-none">
       {icon && (
         <Image
           className="w-7 h-7"
@@ -111,7 +111,7 @@ function SkillItem({
 
 function TechStack() {
   return (
-    <div className="px-4 lg:px-20 py-2 lg:py-6">
+    <div className="px-4 py-2 sm:px-6 lg:px-12 lg:py-6">
       {skills.map((skill) => (
         <div
           key={skill.label}

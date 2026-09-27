@@ -34,6 +34,8 @@ function About() {
                 relative h-28 w-28 shrink-0
                 -mt-14 sm:-mt-16
                 rounded-full border-4 border-white bg-white shadow-sm
+                transition-transform duration-200 hover:-translate-y-0.5 hover:rotate-1
+                motion-reduce:transform-none motion-reduce:transition-none
                 sm:h-32 sm:w-32
                 md:h-34 md:w-34
               "
@@ -53,7 +55,7 @@ function About() {
               </h1>
 
               <p className="font-pixel text-xs text-zinc-700 sm:text-sm md:text-base mt-0.5">
-                Software Development Engineer in Test
+                Software Engineer-QA
               </p>
             </div>
           </div>
@@ -83,13 +85,8 @@ function About() {
               sm:mt-4 sm:text-lg sm:text-justify
             "
           >
-            Software Testing Engineer who enjoys breaking things before users
-            do. Experienced in manual testing, test case design, bug tracking,
-            and SDLC/STLC, with a growing focus on automation and SDET
-            practices. Currently building skills in Java, Selenium, API
-            testing, and SQL to turn repetitive testing into smart, reliable
-            automation. Curious by nature, detail-oriented, and always looking
-            for better ways to build and test software.
+           I’m a Computer Science graduate working in Quality Assurance, with a strong interest in understanding how software works and finding where it can break. My experience includes functional and regression testing, API testing with Postman, SQL validation, log analysis, bug tracking, and troubleshooting real application issues. I enjoy digging into problems rather than just reporting them, whether that means checking logs, validating API responses, or working with developers to understand the root cause. I’m also building my skills in Java and Selenium to move deeper into automation and grow as an SDET.
+
           </p>
         </section>
 
@@ -136,7 +133,7 @@ function About() {
             </p>
           </div>
           <div className="font-pixel py-1">
-            <p>Bachelor's of Engineering - CSE</p>
+            <p>Bachelor's of Engineering in Computer Science</p>
           </div>
           </div>
         </section>
@@ -160,19 +157,48 @@ function About() {
               </p>
             </div>
 
-            <div className="flex justify-between mt-1 font-pixel text-sm italic sm:text-base">
+            <div className="mt-1 flex flex-col gap-1 font-pixel text-sm italic sm:flex-row sm:justify-between sm:text-base">
               <p className="">
               Software Tester
             </p>
             <p className="text-xs text-zinc-600 sm:text-sm">May 2026 - Present</p>
             </div>
 
-            <p className="py-2 font-pixel text-sm leading-relaxed text-gray-700 sm:text-base">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga quo
-              assumenda praesentium nihil voluptatum repellat, enim sequi neque
-              ut eius obcaecati quibusdam consequuntur a quod vero! Veritatis
-              possimus reiciendis sunt?
-            </p>
+<ul className="list-disc space-y-1 py-2 pl-5 font-pixel text-sm leading-relaxed text-gray-700 sm:text-base">
+  <li>
+    Perform functional, regression & exploratory testing across application
+    workflows.
+  </li>
+
+  <li>
+    Analyze application logs, API responses & SQL data to investigate and
+    troubleshoot issues.
+  </li>
+
+  <li>
+    Perform API testing using Postman and validate backend data using SQL
+    queries.
+  </li>
+
+  <li>
+    Identify, document, track & retest defects using Jira throughout the
+    defect lifecycle.
+  </li>
+
+  <li>
+    Collaborate with developers and cross-functional teams to investigate
+    issues and ensure timely resolution.
+  </li>
+
+  <li>
+    Validate UI, workflows, cross-browser compatibility & application
+    behavior.
+  </li>
+
+  <li>
+    Develop automation testing skills using Java & Selenium.
+  </li>
+</ul>
           </div>
         </section>
       </div>

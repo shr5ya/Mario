@@ -58,3 +58,51 @@ body {
 .animate-walker {
   animation: walker 12s linear infinite;
 }
+/* Small, keyboard-friendly feedback for the portfolio's interactive controls. */
+:where(a, button, input, textarea):focus-visible {
+  outline: 3px solid #ec4899;
+  outline-offset: 3px;
+}
+
+@keyframes pixel-press {
+  0% { transform: scale(1); }
+  45% { transform: scale(0.96) translateY(1px); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pixel-pop {
+  0% { opacity: 0; transform: scale(0.97); }
+  70% { opacity: 1; transform: scale(1.015); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:active,
+  button:active:not(:disabled) {
+    animation: pixel-press 140ms steps(2, end);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate-walker {
+    animation: none !important;
+  }
+}
+@keyframes project-image-in-next {
+  from { opacity: 0.35; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes project-image-in-previous {
+  from { opacity: 0.35; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}

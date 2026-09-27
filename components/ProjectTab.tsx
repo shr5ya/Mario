@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import { Link2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Link2 } from "lucide-react";
+import { useClickSound } from "@/hooks/useClickSound";
 import GithubSVG from "@/assets/github (1).svg";
 
 export interface ProjectProps {
@@ -13,6 +14,9 @@ export interface ProjectProps {
   githubLink: string;
   tech?: readonly string[] | string[];
   images: (StaticImageData | string)[];
+  canChangeProject: boolean;
+  onPreviousProject: () => void;
+  onNextProject: () => void;
 }
 
 function ProjectTab({
@@ -25,302 +29,329 @@ function ProjectTab({
 }: ProjectProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const nextImage = () => {
-    if (images.length === 0) return;
+  const [transitionDirection, setTransitionDirection] = useState<
+    "next" | "previous"
+  >("next");
 
-    setCurrentImageIndex(
-      (prev) => (prev + 1) % images.length
+  const playClickSound = useClickSound();
+
+  const moveImage = (direction: "next" | "previous") => {
+    if (images.length < 2) return;
+
+    playClickSound();
+
+    setTransitionDirection(direction);
+
+    setCurrentImageIndex((current) =>
+      direction === "next"
+        ? (current + 1) % images.length
+        : (current - 1 + images.length) % images.length
     );
   };
 
-  const prevImage = () => {
-    if (images.length === 0) return;
+  const selectImage = (index: number) => {
+    if (index === currentImageIndex) return;
 
-    setCurrentImageIndex(
-      (prev) => (prev - 1 + images.length) % images.length
+    playClickSound();
+
+    setTransitionDirection(
+      index > currentImageIndex ? "next" : "previous"
     );
+
+    setCurrentImageIndex(index);
   };
+
+  const imageAnimation =
+    transitionDirection === "next"
+      ? "animate-[project-image-in-next_220ms_ease-out]"
+      : "animate-[project-image-in-previous_220ms_ease-out]";
 
   return (
-    <div className="w-full overflow-hidden font-pixel">
-      <div className="w-full px-2">
+    <div className="mx-auto w-full max-w-6xl overflow-hidden px-1 font-pixel sm:px-2">
 
-        {/* Image */}
-        <div className="mx-auto w-full max-w-5xl rounded-2xl border border-pink-200 bg-pink-50/60 p-1 shadow-inner">
-          <div className="rounded-xl bg-white p-1">
+      {/* =========================
+          SCREENSHOT CAROUSEL
+      ========================== */}
+      <section className="rounded-2xl border-2 border-pink-200 bg-pink-50/60 p-2 shadow-inner sm:p-4">
+        <div className="flex w-full items-center gap-2 sm:gap-5">
 
-            <div className="relative mx-auto flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-xl bg-pink-50/80 p-1 sm:aspect-auto sm:h-[clamp(220px,38vh,430px)] sm:p-2">
-              {link ? (
-                <Link
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-full w-full items-center justify-center"
-                >
-                  {images.length > 0 ? (
-                    <Image
-                      src={images[currentImageIndex]}
-                      className="h-auto max-h-full w-full rounded-lg object-contain shadow-sm sm:h-auto sm:w-auto sm:max-h-full sm:max-w-full"
-                      alt={`${name.toLowerCase()}-project-image`}
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center rounded-xl bg-pink-50 font-mono text-pink-400">
-                      No Images
-                    </div>
-                  )}
-                </Link>
-              ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  {images.length > 0 ? (
-                    <Image
-                      src={images[currentImageIndex]}
-                      className="h-auto max-h-full w-full rounded-lg object-contain shadow-sm sm:h-auto sm:w-auto sm:max-h-full sm:max-w-full"
-                      alt={`${name.toLowerCase()}-project-image`}
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center rounded-xl bg-pink-50 font-mono text-pink-400">
-                      No Images
-                    </div>
-                  )}
-                </div>
-              )}
+          {/* Previous Screenshot */}
+          <button
+            type="button"
+            onClick={() => moveImage("previous")}
+            disabled={images.length < 2}
+            aria-label="Previous screenshot"
+            className="
+              flex h-10 w-10 shrink-0 items-center justify-center
+              rounded-xl border-2 border-pink-950
+              bg-pink-400 text-pink-950
+              shadow-[0_4px_0_#831843]
+              transition-transform duration-150
+              hover:scale-105 hover:bg-pink-300
+              active:scale-95
+              disabled:cursor-default
+              disabled:opacity-40
+              sm:h-16 sm:w-16
+              sm:rounded-2xl
+              sm:border-[3px]
+            "
+          >
+            <ChevronLeft
+              className="h-6 w-6 stroke-[3] sm:h-10 sm:w-10"
+            />
+          </button>
 
-              {/* Image Navigation */}
-              {images.length > 1 && (
-                <>
-                  {/* Previous Image */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      prevImage();
-                    }}
-                    className="
-                      absolute
-                      left-3
-                      top-1/2
-                      z-10
-                      -translate-y-1/2
-                      rounded-full
-                      border
-                      border-pink-300
-                      bg-white/90
-                      p-2
-                      text-pink-900
-                      shadow-md
-                      backdrop-blur-sm
-                      transition-all
-                      duration-200
-                      hover:bg-pink-100
+          {/* Screenshot */}
+          <div
+            className="
+              relative aspect-[16/10]
+              min-w-0 flex-1
+              overflow-hidden rounded-xl
+              bg-white shadow-sm
+              sm:aspect-auto
+              sm:h-[clamp(220px,38vh,410px)]
+            "
+          >
+            {link ? (
+              <Link
+                href={link}
+                onClick={playClickSound}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  group flex h-full w-full
+                  items-center justify-center
+                "
+                aria-label={`Open ${name} live project`}
+              >
+                {images.length > 0 && (
+                  <Image
+                    key={`${name}-${currentImageIndex}`}
+                    src={images[currentImageIndex]}
+                    alt={`${name} project screenshot ${
+                      currentImageIndex + 1
+                    }`}
+                    fill
+                    sizes="
+                      (max-width: 639px) 75vw,
+                      (max-width: 1023px) 70vw,
+                      800px
                     "
-                    aria-label="Previous image"
-                  >
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </button>
+                    className={`
+                      object-contain p-1
+                      transition-transform duration-200
+                      group-hover:scale-[1.01]
+                      motion-reduce:transform-none
+                      ${imageAnimation}
+                      motion-reduce:animate-none
+                    `}
+                    priority
+                  />
+                )}
+              </Link>
+            ) : (
+              images.length > 0 && (
+                <Image
+                  key={`${name}-${currentImageIndex}`}
+                  src={images[currentImageIndex]}
+                  alt={`${name} project screenshot ${
+                    currentImageIndex + 1
+                  }`}
+                  fill
+                  sizes="
+                    (max-width: 639px) 75vw,
+                    (max-width: 1023px) 70vw,
+                    800px
+                  "
+                  className={`
+                    object-contain p-1
+                    ${imageAnimation}
+                    motion-reduce:animate-none
+                  `}
+                  priority
+                />
+              )
+            )}
+          </div>
 
-                  {/* Next Image */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      nextImage();
-                    }}
-                    className="
-                      absolute
-                      right-3
-                      top-1/2
-                      z-10
-                      -translate-y-1/2
-                      rounded-full
-                      border
-                      border-pink-300
-                      bg-white/90
-                      p-2
-                      text-pink-900
-                      shadow-md
-                      backdrop-blur-sm
-                      transition-all
-                      duration-200
-                      hover:bg-pink-100
-                    "
-                    aria-label="Next image"
-                  >
-                    <svg
-                      className="h-5 w-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
+          {/* Next Screenshot */}
+          <button
+            type="button"
+            onClick={() => moveImage("next")}
+            disabled={images.length < 2}
+            aria-label="Next screenshot"
+            className="
+              flex h-10 w-10 shrink-0 items-center justify-center
+              rounded-xl border-2 border-pink-950
+              bg-pink-400 text-pink-950
+              shadow-[0_4px_0_#831843]
+              transition-transform duration-150
+              hover:scale-105 hover:bg-pink-300
+              active:scale-95
+              disabled:cursor-default
+              disabled:opacity-40
+              sm:h-16 sm:w-16
+              sm:rounded-2xl
+              sm:border-[3px]
+            "
+          >
+            <ChevronRight
+              className="h-6 w-6 stroke-[3] sm:h-10 sm:w-10"
+            />
+          </button>
+        </div>
 
-                  {/* Image Dots */}
-                  <div
-                    className="
-                      absolute
-                      bottom-3
-                      left-1/2
-                      z-10
-                      flex
-                      -translate-x-1/2
-                      gap-2
-                    "
-                  >
-                    {images.map((_, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setCurrentImageIndex(index);
-                        }}
-                        className={`
-                          h-2
-                          rounded-full
-                          transition-all
-                          duration-200
-                          ${
-                            index === currentImageIndex
-                              ? "w-7 bg-pink-600"
-                              : "w-2 bg-pink-300 hover:bg-pink-400"
-                          }
-                        `}
-                        aria-label={`Go to image ${index + 1}`}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
+        {/* Screenshot Pagination Dots ONLY */}
+        {images.length > 1 && (
+          <div
+            className="
+              flex items-center justify-center
+              gap-2 pt-2
+            "
+            aria-label="Project screenshots"
+          >
+            {images.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => selectImage(index)}
+                aria-label={`Show screenshot ${index + 1}`}
+                aria-current={
+                  index === currentImageIndex
+                    ? "true"
+                    : undefined
+                }
+                className={`
+                  h-2 rounded-full
+                  transition-all duration-200
+                  active:scale-90
+                  ${
+                    index === currentImageIndex
+                      ? "w-7 bg-pink-600"
+                      : "w-2 bg-pink-300 hover:bg-pink-400"
+                  }
+                `}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* =========================
+          PROJECT DETAILS
+      ========================== */}
+      <section
+        className="
+          mt-2 rounded-2xl
+          border-2 border-pink-200
+          bg-pink-50/70
+          px-3 py-2.5
+          sm:mt-3
+          sm:px-5 sm:py-4
+        "
+      >
+        {/* Project Name + Links */}
+        <div className="flex items-center justify-between gap-3">
+          <h2
+            className="
+              min-w-0 truncate
+              font-pixel text-lg font-bold
+              tracking-widest text-pink-950
+              sm:text-2xl
+            "
+          >
+            {name}
+          </h2>
+
+          {/* Project Links */}
+          <div className="flex shrink-0 items-center gap-3 sm:gap-5">
+
+            {/* Live Project */}
+            {link && (
+              <Link
+                href={link}
+                onClick={playClickSound}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${name} live link`}
+                className="
+                  text-pink-800
+                  transition-all duration-150
+                  hover:scale-110
+                  hover:text-pink-500
+                  active:scale-95
+                "
+              >
+                <Link2 className="h-5 w-5 sm:h-6 sm:w-6" />
+              </Link>
+            )}
+
+            {/* GitHub */}
+            {githubLink && (
+              <Link
+                href={githubLink}
+                onClick={playClickSound}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${name} GitHub`}
+                className="
+                  transition-transform duration-150
+                  hover:scale-110
+                  active:scale-95
+                "
+              >
+                <Image
+                  src={GithubSVG}
+                  className="h-5 w-5 rounded-full sm:h-6 sm:w-6"
+                  alt="GitHub"
+                />
+              </Link>
+            )}
           </div>
         </div>
 
-        {/* Project Details */}
-        <div className="mx-auto mt-2 w-full max-w-5xl px-2 sm:px-4">
-
-          {/* Name + Links */}
-          <div className="flex items-center justify-between gap-4">
-
-            <p className="min-w-0 truncate text-xl font-bold tracking-widest text-pink-950 sm:text-2xl">
-              {name}
-            </p>
-
-            <div className="flex shrink-0 items-center gap-4 sm:gap-6">
-
-              {/* Website */}
-              {link && (
-                <Link
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${name} website`}
-                >
-                  <Link2
-                    className="
-                      h-5
-                      w-5
-                      text-pink-800
-                      transition-colors
-                      hover:text-pink-500
-                      sm:h-6
-                      sm:w-6
-                    "
-                  />
-                </Link>
-              )}
-
-              {/* GitHub */}
-              {githubLink && (
-                <Link
-                  href={githubLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${name} GitHub`}
-                >
-                  <Image
-                    src={GithubSVG}
-                    className="
-                      h-5
-                      w-5
-                      rounded-full
-                      hover:bg-pink-100
-                      sm:h-6
-                      sm:w-6
-                    "
-                    alt="github"
-                  />
-                </Link>
-              )}
-            </div>
-          </div>
-
-          {/* Tech Stack */}
-          {tech.length > 0 && (
-            <div className="mb-2 mt-2 flex flex-wrap gap-2">
-              {tech.map((tag) => (
-                <span
-                  key={tag}
-                  className="
-                    select-none
-                    rounded-md
-                    border
-                    border-pink-200
-                    bg-pink-100
-                    px-2.5
-                    py-0.5
-                    font-mono
-                    text-xs
-                    tracking-wider
-                    text-pink-900
-                    transition-all
-                    duration-200
-                    hover:border-pink-300
-                    hover:bg-pink-200
-                    hover:text-pink-950
-                  "
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Description */}
-          {/* <p
+        {/* Project Description */}
+        {content && (
+          <p
             className="
-              mt-1
-              line-clamp-2
-              font-mono
-              text-sm
-              leading-relaxed
-              text-pink-950/75
+              mt-2
+              text-xs leading-relaxed
+              text-pink-950/80
+              sm:text-sm
             "
           >
             {content}
-          </p> */}
-        </div>
-      </div>
+          </p>
+        )}
+
+        {/* Technology Tags */}
+        {tech.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-2">
+            {tech.map((tag) => (
+              <span
+                key={tag}
+                className="
+                  select-none
+                  rounded-md
+                  border border-pink-200
+                  bg-pink-100
+                  px-2.5 py-0.5
+                  font-mono text-xs
+                  tracking-wider
+                  text-pink-900
+                  transition-all duration-150
+                  hover:-translate-y-0.5
+                  hover:border-pink-300
+                  hover:bg-pink-200
+                  hover:text-pink-950
+                "
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
