@@ -93,7 +93,7 @@ function HomePage() {
         </h1>
 
         <p className="mt-5 font-pixel text-sm tracking-wide text-pink-100 md:text-base">
-          Testing today for a better future
+          Breaking software before users do.
         </p>
       </div>
 
